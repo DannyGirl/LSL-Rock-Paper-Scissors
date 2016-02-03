@@ -1,0 +1,38 @@
+
+integer myListener; 
+default
+{
+    touch_end (integer num)
+    {
+        llListenRemove(myListener);
+        key user = llDetectedKey(0);
+        myListener = llListen(13, "", user, "");
+        llDialog(user, "Do you choose Rock, Paper or Scissors?", ["Rock", "Paper", "Scissors"], 13);
+        llSetTimerEvent (5.0);
+    }
+    listen(integer channel, string name, key id, string message)
+    {
+        llSay(0, "Your choice is " + message);
+        llSetTimerEvent(1.0);
+     
+    string choice;
+    float rand = llFrand(3.0);
+    if (rand < 1.0) {
+        choice = "Rock";
+    } else if (rand > 2.0) {
+        choice = "Paper";
+    } else {
+        choice = "Scissors";
+    }
+    llSay(0, "My choice is " + choice);
+    llSetTimerEvent(1.0);
+    
+    if (message == choice) {
+        llSay (0, "We tie. Let's play again!");
+    } else if ((message == "Rock" && choice == "Paper") || (message == "Paper" && choice == "Scissors") || (message == "Scissors" && choice == "Rock")) {
+        llSay (0, "I win. Better luck next time.");
+    } else {
+        llSay (0, "Congratulations, you win!");
+    }
+}
+}
